@@ -7,37 +7,19 @@
 
 import UIKit
 
-final class EventCell: UITableViewCell, CustomCellConfiguring {
-    private lazy var yearLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 28, weight: .medium)
-        label.textColor = .white
-        return label
-    }()
-
-    private lazy var monthLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 28, weight: .medium)
-        label.textColor = .white
-        return label
-    }()
+final class EventCell: UITableViewCell {
+    static var reuseIdentifier: String {
+        return String(describing: self)
+    }
     
-    private lazy var weekLabel: UILabel = {
+    private lazy var timeRemainingLabels: [UILabel] = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 28, weight: .medium)
         label.textColor = .white
-        return label
-    }()
-    
-    private lazy var dayLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 28, weight: .medium)
-        label.textColor = .white
-        return label
+        
+        let timeRemainingLabels = [label, label, label, label]
+        return timeRemainingLabels
     }()
     
     private lazy var dateLabel: UILabel = {
@@ -67,14 +49,12 @@ final class EventCell: UITableViewCell, CustomCellConfiguring {
     }()
     
     private lazy var verticalStackView: UIStackView = {
-        let sv = UIStackView(arrangedSubviews: [
-            yearLabel,
-            monthLabel,
-            weekLabel,
-            dayLabel,
-            UIView(),
-            dateLabel
-        ])
+//        let sv = UIStackView(arrangedSubviews: [
+//            timeRemainingLabels,
+//            UIView(),
+//            dateLabel
+//        ])
+        let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
         sv.alignment = .trailing
@@ -93,13 +73,19 @@ final class EventCell: UITableViewCell, CustomCellConfiguring {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupHeirarchy() {
+    private func setupHeirarchy() {
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(verticalStackView)
         contentView.addSubview(eventNameLabel)
+        
+        timeRemainingLabels.forEach {
+            verticalStackView.addArrangedSubview($0)
+        }
+        verticalStackView.addArrangedSubview(UIView())
+        verticalStackView.addArrangedSubview(dateLabel)
     }
     
-    func setupLayout() {
+    private func setupLayout() {
         backgroundImageView.pinToSuperviewEdges([.top, .leading, .trailing])
         let bottomConstraint = backgroundImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         bottomConstraint.priority = .required - 1
@@ -110,13 +96,15 @@ final class EventCell: UITableViewCell, CustomCellConfiguring {
     }
     
     func update(with viewModel: EventCellViewModel) {
-        yearLabel.text = viewModel.yearText
-        monthLabel.text = viewModel.monthText
-        weekLabel.text = viewModel.weekText
-        dayLabel.text = viewModel.dayText
+        viewModel.timeRemainingStrings.enumerated().forEach {
+            timeRemainingLabels[$0.offset].text = $0.element
+        }
         dateLabel.text = viewModel.dateText
         eventNameLabel.text = viewModel.eventName
-        backgroundImageView.image = viewModel.backgroundImage
+        viewModel.loadImage { image in
+            self.backgroundImageView.image = image
+        }
+        
     }
 }
 

@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class TitleSubtitleCell: UITableViewCell, CustomCellConfiguring {
+final class TitleSubtitleCell: UITableViewCell {
+    static var reuseIdentifier: String {
+        return String(describing: self)
+    }
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -80,16 +84,16 @@ final class TitleSubtitleCell: UITableViewCell, CustomCellConfiguring {
         
     }
     
-    func setupHeirarchy() {
+    private func setupHeirarchy() {
         contentView.addSubview(verticalStackView)
     }
     
-    func setupLayout() {
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             verticalStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
             verticalStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
             verticalStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            //verticalStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
+            verticalStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
             
             photoImageView.heightAnchor.constraint(equalToConstant: 200),
             
@@ -114,6 +118,6 @@ final class TitleSubtitleCell: UITableViewCell, CustomCellConfiguring {
     }
     
     @objc func tappedDone() {
-        viewModel?.update(datePicker.date )
+        viewModel?.update(datePicker.date)
     }
 }

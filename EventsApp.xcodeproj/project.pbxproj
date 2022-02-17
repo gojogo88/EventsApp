@@ -30,6 +30,7 @@
 		6C21CDB127BEE54F00E09D06 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C21CDB027BEE54F00E09D06 /* EventCell.swift */; };
 		6C21CDB327BEE78800E09D06 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C21CDB227BEE78800E09D06 /* UIView+Extensions.swift */; };
 		6C21CDB527BEEE0000E09D06 /* CustomCellConfiguring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C21CDB427BEEE0000E09D06 /* CustomCellConfiguring.swift */; };
+		6C21CDB727BEF50900E09D06 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C21CDB627BEF50900E09D06 /* Date+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		6C21CDB027BEE54F00E09D06 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		6C21CDB227BEE78800E09D06 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		6C21CDB427BEEE0000E09D06 /* CustomCellConfiguring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellConfiguring.swift; sourceTree = "<group>"; };
+		6C21CDB627BEF50900E09D06 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 			children = (
 				6C21CD9227BDAD8100E09D06 /* UIColor+Extensions.swift */,
 				6C21CDB227BEE78800E09D06 /* UIView+Extensions.swift */,
+				6C21CDB627BEF50900E09D06 /* Date+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C21CDA627BDC58300E09D06 /* TitleSubtitleCell.swift in Sources */,
+				6C21CDB727BEF50900E09D06 /* Date+Extensions.swift in Sources */,
 				6C21CD8D27BDA86700E09D06 /* AppCoordinator.swift in Sources */,
 				6C21CDB327BEE78800E09D06 /* UIView+Extensions.swift in Sources */,
 				6C21CD9127BDAA3900E09D06 /* EventListVC.swift in Sources */,

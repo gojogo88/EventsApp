@@ -30,7 +30,7 @@ final class AddEventViewModel {
         return dateFormatter
     }()
     
-    init(cellBuilder: EventsCellBuilder, coreDataManager: CoreDataManager) {
+    init(cellBuilder: EventsCellBuilder, coreDataManager: CoreDataManager = CoreDataManager.shared) {
         self.cellBuilder = cellBuilder
         self.coreDataManager = coreDataManager
     }
@@ -67,7 +67,7 @@ final class AddEventViewModel {
         
     }
     
-    func updateText(indexPath: IndexPath, subtitle: String) {
+    func updatCell(indexPath: IndexPath, subtitle: String) {
         switch cells[indexPath.row] {
         case .titleSubtitle(let titleSubtitleViewModel):
             titleSubtitleViewModel.update(subtitle)
@@ -99,7 +99,9 @@ private extension AddEventViewModel {
             self?.onUpdate()
         }
         
-        guard let nameCellViewModel = nameCellViewModel, let dateCellViewModel = dateCellViewModel, let backgroundImageCellViewModel = backgroiundImageCellViewModel else {
+        guard let nameCellViewModel = nameCellViewModel,
+                let dateCellViewModel = dateCellViewModel,
+                let backgroundImageCellViewModel = backgroiundImageCellViewModel else {
             return
         }
         

@@ -93,24 +93,16 @@ extension AddEventVC: UITableViewDataSource {
 
 extension AddEventVC: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        guard let currentText = textField.text else { return false }
-//        let text = currentText + string
-//
-//        let point = textField.convert(textField.bounds.origin, to: tableView)
-//        if let indexPath = tableView.indexPathForRow(at: point) {
-//            viewModel.updateText(indexPath: indexPath, subtitle: text)
-//        }
-//        return true
         
         if let text = textField.text, let textRange = Range(range, in: text) {
-                    let updatedText = text.replacingCharacters(in: textRange, with: string)
-                    
-                    let point = textField.convert(textField.bounds.origin, to: tableView)
-                    if let indexPath = tableView.indexPathForRow(at: point) {
-                        viewModel.updateText(indexPath: indexPath, subtitle: updatedText)
-                    }
-                }
-                return true
+            let updatedText = text.replacingCharacters(in: textRange, with: string)
+            
+            let point = textField.convert(textField.bounds.origin, to: tableView)
+            if let indexPath = tableView.indexPathForRow(at: point) {
+                viewModel.updatCell(indexPath: indexPath, subtitle: updatedText)
+            }
+        }
+        return true
     }
 }
 
