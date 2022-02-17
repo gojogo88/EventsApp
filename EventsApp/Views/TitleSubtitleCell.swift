@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TitleSubtitleCell: UITableViewCell {
+final class TitleSubtitleCell: UITableViewCell, CustomCellConfiguring {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -80,11 +80,11 @@ final class TitleSubtitleCell: UITableViewCell {
         
     }
     
-    private func setupHeirarchy() {
+    func setupHeirarchy() {
         contentView.addSubview(verticalStackView)
     }
     
-    private func setupLayout() {
+    func setupLayout() {
         NSLayoutConstraint.activate([
             verticalStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
             verticalStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),

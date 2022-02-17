@@ -16,7 +16,7 @@ final class AddEventVC: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.dataSource = self
         tv.delegate = self
-        tv.register(TitleSubtitleCell.self, forCellReuseIdentifier: "TitleSubtitleCell")
+        tv.register(TitleSubtitleCell.self, forCellReuseIdentifier: TitleSubtitleCell.reuseIdentifier)
         tv.tableFooterView = UIView()
         return tv
     }()
@@ -83,7 +83,7 @@ extension AddEventVC: UITableViewDataSource {
         let cellViewModel = viewModel.cell(for: indexPath)
         switch cellViewModel {
         case .titleSubtitle(let titleSubtitleCellViewModel):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleSubtitleCell", for: indexPath) as! TitleSubtitleCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: TitleSubtitleCell.reuseIdentifier, for: indexPath) as! TitleSubtitleCell
             cell.update(with: titleSubtitleCellViewModel)
             cell.subtitleTextField.delegate = self
             return cell

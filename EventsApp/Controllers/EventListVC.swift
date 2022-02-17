@@ -17,11 +17,27 @@ class EventListVC: UIViewController {
     
     var viewModel: EventListViewModel!
     
+    private lazy var tableView: UITableView = {
+        let tv = UITableView(frame: .zero)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.dataSource = self
+        //tv.delegate = self
+        tv.register(EventCell.self, forCellReuseIdentifier: EventCell.reuseIdentifier)
+        tv.tableFooterView = UIView()
+        return tv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViews()
+        setupHeirarchy()
+        setupLayout()
         
+        viewModel.onUpdate = { [weak self] in
+            self?.tableView.reloadData()
+        }
+        viewModel.viewDidLoad()
     }
     
     private func setupViews() {
@@ -35,8 +51,34 @@ class EventListVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
+    private func setupHeirarchy() {
+        view.addSubview(tableView)
+    }
+    
+    private func setupLayout() {
+        tableView.pinToSuperviewEdges()
+    }
+    
     @objc private func tappedAddEventButton() {
         viewModel.tappedAddEvent()
     }
 
+}
+
+
+extension EventListVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfRows()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch viewModel.cell(at: indexPath) {
+        case .event(let eventCellViewModel):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.reuseIdentifier, for: indexPath) as? EventCell else { return UITableViewCell() }
+            cell.update(with: eventCellViewModel)
+            return cell
+        }
+    }
+    
+    
 }
