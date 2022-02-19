@@ -21,7 +21,7 @@ class EventListVC: UIViewController {
         let tv = UITableView(frame: .zero)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.dataSource = self
-        //tv.delegate = self
+        tv.delegate = self
         tv.register(EventCell.self, forCellReuseIdentifier: EventCell.reuseIdentifier)
         tv.tableFooterView = UIView()
         return tv
@@ -79,6 +79,10 @@ extension EventListVC: UITableViewDataSource {
             return cell
         }
     }
-    
-    
+}
+
+extension EventListVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.didSelectRow(at: indexPath)
+    }
 }

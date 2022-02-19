@@ -12,20 +12,23 @@ final class EventCell: UITableViewCell {
         return String(describing: self)
     }
     
-    private lazy var timeRemainingLabels: [UILabel] = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 28, weight: .medium)
-        label.textColor = .white
-        
-        let timeRemainingLabels = [label, label, label, label]
-        return timeRemainingLabels
-    }()
+//    private lazy var timeRemainingLabels: [UILabel] = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.font = .systemFont(ofSize: 28, weight: .medium)
+//        label.textColor = .white
+//
+//        let timeRemainingLabels = [label, label, label, label]
+//        return timeRemainingLabels
+//    }()
+    
+    private let timeRemainingStackView = TimeRemainingStackView()
     
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 22, weight: .medium)
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .white
         return label
     }()
@@ -34,6 +37,7 @@ final class EventCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 34, weight: .bold)
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .white
         return label
     }()
@@ -49,12 +53,11 @@ final class EventCell: UITableViewCell {
     }()
     
     private lazy var verticalStackView: UIStackView = {
-//        let sv = UIStackView(arrangedSubviews: [
-//            timeRemainingLabels,
-//            UIView(),
-//            dateLabel
-//        ])
-        let sv = UIStackView()
+        let sv = UIStackView(arrangedSubviews: [
+            timeRemainingStackView,
+            UIView(),
+            dateLabel
+        ])
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
         sv.alignment = .trailing
@@ -65,6 +68,7 @@ final class EventCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        setupViews()
         setupHeirarchy()
         setupLayout()
     }
@@ -73,16 +77,19 @@ final class EventCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        eventNameLabel.text = nil
+        dateLabel.text = nil
+    }
+    
+    private func setupViews() {
+        timeRemainingStackView.setup()
+    }
+    
     private func setupHeirarchy() {
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(verticalStackView)
         contentView.addSubview(eventNameLabel)
-        
-        timeRemainingLabels.forEach {
-            verticalStackView.addArrangedSubview($0)
-        }
-        verticalStackView.addArrangedSubview(UIView())
-        verticalStackView.addArrangedSubview(dateLabel)
     }
     
     private func setupLayout() {
@@ -90,15 +97,20 @@ final class EventCell: UITableViewCell {
         let bottomConstraint = backgroundImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         bottomConstraint.priority = .required - 1
         bottomConstraint.isActive = true
+        
         backgroundImageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
         verticalStackView.pinToSuperviewEdges([.top, .trailing, .bottom], constant: 16)
         eventNameLabel.pinToSuperviewEdges([.leading, .bottom], constant: 16)
+        NSLayoutConstraint.activate([
+            eventNameLabel.rightAnchor.constraint(equalTo: verticalStackView.leftAnchor, constant: -8)
+        ])
     }
     
     func update(with viewModel: EventCellViewModel) {
-        viewModel.timeRemainingStrings.enumerated().forEach {
-            timeRemainingLabels[$0.offset].text = $0.element
+        if let timeRemainingViewModel = viewModel.timeRemainingViewModel {
+            timeRemainingStackView.update(with: timeRemainingViewModel)
         }
+        
         dateLabel.text = viewModel.dateText
         eventNameLabel.text = viewModel.eventName
         viewModel.loadImage { image in

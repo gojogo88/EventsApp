@@ -96,7 +96,6 @@ final class TitleSubtitleCell: UITableViewCell {
             verticalStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
             
             photoImageView.heightAnchor.constraint(equalToConstant: 200),
-            
         ])
     }
     

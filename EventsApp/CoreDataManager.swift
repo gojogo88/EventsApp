@@ -11,6 +11,7 @@ import UIKit
 final class CoreDataManager {
     
     static let shared = CoreDataManager()
+    private init() {}
     
     lazy var persistentContainer: NSPersistentContainer = {
         let persistentContainer = NSPersistentContainer(name: "EventsApp")
@@ -24,28 +25,35 @@ final class CoreDataManager {
         persistentContainer.viewContext
     }
     
-    func saveEvent(name: String, date: Date, image: UIImage) {
-        let event = Event(context: moc)
-        event.setValue(name, forKey: "name")
-        let imageData = image.jpegData(compressionQuality: 1)
-        event.setValue(imageData, forKey: "image")
-        event.setValue(date, forKey: "date")
-        
+    func get<T: NSManagedObject>(_ id: NSManagedObjectID) -> T? {
+        do {
+            return try moc.existingObject(with: id) as? T
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+    
+    func getAll<T: NSManagedObject>() -> [T] {
+        do {
+            let fetchRequest = NSFetchRequest<T>(entityName: "\(T.self)")
+//            let backgroundContext = persistentContainer.newBackgroundContext()
+//            backgroundContext.perform {
+//                <#code#>
+//            }
+            return try moc.fetch(fetchRequest)
+        } catch {
+            print(error)
+            return []
+        }
+    }
+    
+    
+    func save() {
         do {
             try moc.save()
         } catch {
             print(error)
-        }
-    }
-        
-    func fetchEvents() -> [Event] {
-        do {
-            let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
-            let events = try moc.fetch(fetchRequest)
-            return events
-        } catch {
-            print(error)
-            return []
         }
     }
 }
